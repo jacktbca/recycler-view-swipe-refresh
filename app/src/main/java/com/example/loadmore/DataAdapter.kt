@@ -1,6 +1,5 @@
 package com.example.loadmore
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,7 @@ import kotlinx.android.synthetic.main.item.view.*
 
 class DataAdapter constructor(
     private val studentList: List<Student?>,
-    private val recyclerView: RecyclerView
+    recyclerView: RecyclerView
 ) : RecyclerView.Adapter<DataAdapter.StudentViewHolder>() {
 
     companion object {
@@ -35,9 +34,7 @@ class DataAdapter constructor(
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
                     val lastPosition = layoutManager.findLastVisibleItemPosition()
-                    Log.d(TAG, "onScrolled - last position $lastPosition")
                     if (!isLoading && totalItemCount <= lastPosition + THRESHOLD) {
-                        Log.d(TAG, "onScrolled - load more")
                         onLoadMoreListener?.run {
                             isLoading = true
                             onLoadMore()

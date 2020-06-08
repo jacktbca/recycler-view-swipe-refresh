@@ -48,7 +48,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun addStudents(count: Int) {
         for (i in (studentIndex + 1)..(studentIndex + count)) {
-            studentList.add(Student("Student$i", "s$i@gmail.com"))
+            studentList.add(Student("Student$i", "student-$i@gmail.com"))
         }
         studentIndex += count
     }
