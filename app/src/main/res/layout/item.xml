@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Name"
             android:textColor="@android:color/black"
             android:textSize="18sp" />
 
@@ -27,9 +26,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvName"
             android:layout_margin="5dp"
-            android:text="Email Id"
             android:textColor="@android:color/black"
             android:textSize="12sp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
     </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

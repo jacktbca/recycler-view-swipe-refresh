@@ -1,5 +1,6 @@
 package com.example.loadmore
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item.view.*
-import kotlinx.android.synthetic.main.progressbar.view.*
 
 class DataAdapter constructor(
-    private val studentList: List<Student>,
+    private val studentList: List<Student?>,
     private val recyclerView: RecyclerView
 ) : RecyclerView.Adapter<DataAdapter.StudentViewHolder>() {
 
@@ -34,10 +34,10 @@ class DataAdapter constructor(
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-
                     val lastPosition = layoutManager.findLastVisibleItemPosition()
-                    if (isLoading && totalItemCount <= lastPosition + THRESHOLD) {
-
+                    Log.d(TAG, "onScrolled - last position $lastPosition")
+                    if (!isLoading && totalItemCount <= lastPosition + THRESHOLD) {
+                        Log.d(TAG, "onScrolled - load more")
                         onLoadMoreListener?.run {
                             isLoading = true
                             onLoadMore()
@@ -51,6 +51,10 @@ class DataAdapter constructor(
     // Call after the loading more is finished
     fun setLoaded() {
         isLoading = false
+    }
+
+    fun setOnLoadMoreListener(listener: OnLoadMoreListener) {
+        onLoadMoreListener = listener
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -81,8 +85,10 @@ class DataAdapter constructor(
         if (student != null) {
             holder.tvName.text = student.name
             holder.tvEmailId.text = student.emailId
+            holder.progressBar.visibility = View.GONE
         } else {
             holder.progressBar.isIndeterminate = true
+            holder.progressBar.visibility = View.VISIBLE
         }
     }
 }
