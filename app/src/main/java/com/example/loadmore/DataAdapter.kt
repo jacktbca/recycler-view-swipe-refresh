@@ -22,6 +22,10 @@ class DataAdapter constructor(
         private const val VIEW_PROGRESS = 0
     }
 
+    interface OnLoadMoreListener {
+        fun onLoadMore()
+    }
+
     private var isLoading: Boolean = false
     private var onLoadMoreListener: OnLoadMoreListener? = null
 
@@ -48,6 +52,14 @@ class DataAdapter constructor(
     // Call after the loading more is finished
     fun setLoaded() {
         isLoading = false
+    }
+
+    fun setOnLoadMoreListener(callback: () -> Unit) {
+        onLoadMoreListener = object : OnLoadMoreListener {
+            override fun onLoadMore() {
+                callback.invoke()
+            }
+        }
     }
 
     fun setOnLoadMoreListener(listener: OnLoadMoreListener) {

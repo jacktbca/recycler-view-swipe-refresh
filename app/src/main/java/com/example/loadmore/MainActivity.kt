@@ -32,22 +32,20 @@ class MainActivity : AppCompatActivity() {
         adapter = DataAdapter(studentList, recyclerView)
         recyclerView.adapter = adapter
 
-        adapter.setOnLoadMoreListener(object : OnLoadMoreListener {
-            override fun onLoadMore() {
-                studentList.add(null)
-                recyclerView.post { adapter.notifyItemInserted(studentList.size - 1) }
+        adapter.setOnLoadMoreListener {
+            studentList.add(null)
+            recyclerView.post { adapter.notifyItemInserted(studentList.size - 1) }
 
-                handler.postDelayed({
-                    studentList.removeAt(studentList.size - 1)
-                    adapter.notifyItemRemoved(studentList.size)
+            handler.postDelayed({
+                studentList.removeAt(studentList.size - 1)
+                adapter.notifyItemRemoved(studentList.size)
 
-                    addStudents(20)
+                addStudents(20)
 
-                    adapter.notifyItemInserted(studentList.size)
-                    adapter.setLoaded()
-                }, 2000)
-            }
-        })
+                adapter.notifyItemInserted(studentList.size)
+                adapter.setLoaded()
+            }, 2000)
+        }
 
         swipeRefreshLayout.setOnRefreshListener {
             handler.postDelayed({
