@@ -8,6 +8,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+
     private var studentIndex = 0
     private val studentList = ArrayList<Student?>()
 
@@ -20,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        addStudents(20)
+        initStudents()
 
         layoutManager = LinearLayoutManager(this)
         recyclerView.setHasFixedSize(true)
@@ -31,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         adapter.setOnLoadMoreListener(object : OnLoadMoreListener {
             override fun onLoadMore() {
                 studentList.add(null)
-                adapter.notifyItemInserted(studentList.size - 1)
+                recyclerView.post { adapter.notifyItemInserted(studentList.size - 1) }
 
                 handler.postDelayed({
                     studentList.removeAt(studentList.size - 1)
@@ -44,6 +48,19 @@ class MainActivity : AppCompatActivity() {
                 }, 2000)
             }
         })
+
+        swipeRefreshLayout.setOnRefreshListener {
+            handler.postDelayed({
+                initStudents()
+                adapter.notifyDataSetChanged()
+                swipeRefreshLayout.isRefreshing = false
+            }, 2000)
+        }
+    }
+
+    private fun initStudents() {
+        studentList.clear()
+        addStudents(20)
     }
 
     private fun addStudents(count: Int) {
